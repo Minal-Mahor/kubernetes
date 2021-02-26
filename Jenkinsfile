@@ -2,11 +2,11 @@ pipeline {
   environment {
   IBM_CLOUD_REGION = 'eu-de'
   REGISTRY_HOSTNAME = 'de.icr.io'
-  IKS_CLUSTER = 'c0qnsr4f0hems8rp3cmg'
+  IKS_CLUSTER = 'c0rj4r1d0huad5id0ut0'
   DEPLOYMENT_NAME = 'iks-test'
   PORT = '5001'
-  registry = "srirammk18/flask-k8s"
-  registryCredential = 'dockerhub_id'
+  registry = "minalmahor/flaskapp"
+  registryCredential = 'dockerHub'
   dockerImage = ''
   }
   agent any 
@@ -51,7 +51,7 @@ pipeline {
         sh '''
             ibmcloud ks cluster config --cluster ${IKS_CLUSTER}
             kubectl config current-context
-            kubectl create deployment ${DEPLOYMENT_NAME} --image=srirammk18/flask-k8s:12 --dry-run -o yaml > deployment.yaml
+            kubectl create deployment ${DEPLOYMENT_NAME} --image=minalmahor/flaskapp:2 --dry-run -o yaml > deployment.yaml
             kubectl apply -f deployment.yaml
             kubectl rollout status deployment/${DEPLOYMENT_NAME}
             kubectl create service loadbalancer ${DEPLOYMENT_NAME} --tcp=80:${PORT} --dry-run -o yaml > service.yaml
